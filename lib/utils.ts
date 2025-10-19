@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 
 type SplitTarget = Element | Element[] | NodeListOf<Element> | string;
 
-type SplitTextAnimationConfig = {
+type SplitTextConfig = {
   type: "chars" | "words" | "lines" | "chars,words" | "words,lines" | string;
 
   autoSplit?: boolean;
@@ -22,10 +22,7 @@ type SplitTextAnimationConfig = {
   onSplit: (splitText: SplitText) => gsap.core.Tween;
 };
 
-export function splitText(
-  target: SplitTarget,
-  config: SplitTextAnimationConfig
-) {
+export function splitText(target: SplitTarget, config: SplitTextConfig) {
   let animation: gsap.core.Tween | undefined;
   let onSplit = config.onSplit;
 
@@ -45,4 +42,66 @@ export function splitText(
 
   SplitText.create(target, config);
   return animation!;
+}
+
+type CreateAnimation = (
+  self: SplitText
+) => gsap.core.Tween | gsap.core.Timeline;
+
+type SplitTextWithAnimate = SplitText & {
+  animate?: (
+    create: CreateAnimation
+  ) => gsap.core.Tween | gsap.core.Timeline | undefined;
+};
+
+type SplitTextAnimationConfig = {
+  type: "chars" | "words" | "lines" | "chars,words" | "words,lines" | string;
+
+  autoSplit?: boolean;
+  mask?: "chars" | "words" | "lines";
+
+  charsClass?: string;
+  wordsClass?: string;
+  linesClass?: string;
+
+  onSplit?: (splitText: SplitText) => gsap.core.Tween;
+};
+
+export function SplitTextAnimator(
+  target: SplitTarget,
+  config: SplitTextAnimationConfig
+) {
+  const originalOnSplit = config.onSplit;
+  const subscribers: Array<(self: SplitText) => void> = [];
+
+  const customSplitText: SplitTextWithAnimate = SplitText.create(target, {
+    ...config,
+    autoSplit: true,
+    onSplit(self) {
+      subscribers.forEach((f) => f(self));
+      originalOnSplit && originalOnSplit(self);
+    },
+  });
+
+  // create is the animation provided to the animate call
+  customSplitText.animate = (create: CreateAnimation) => {
+    let animation: gsap.core.Tween | gsap.core.Timeline | undefined;
+
+    const onSplit = (self: SplitText) => {
+      let parent;
+      let startTime;
+      if (animation) {
+        parent = animation.parent;
+        startTime = animation.startTime();
+        animation.kill();
+      }
+      animation = create && create(self);
+      parent && parent.add(animation, startTime || 0);
+    };
+    subscribers.push(onSplit);
+    onSplit(customSplitText);
+    return animation;
+  };
+
+  return customSplitText;
 }

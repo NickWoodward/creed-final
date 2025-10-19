@@ -5,11 +5,25 @@ import jakePlaceholder from "/assets/images/jake-placeholder.png";
 export const heroData = {
   description:
     "Professional videography and photography services for artists, corporate clients, and events.",
-  serviceTitles: [
-    "Professional Profiles",
-    "Corporate Communications",
-    "Special Events",
+
+  services: [
+    {
+      title: "Professional Profiles",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+    },
+    {
+      title: "Corporate Communications",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+    },
+    {
+      title: "Special Events",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+    },
   ],
+
   videos: [
     { id: "hero-video-1", url: process.env.NEXT_PUBLIC_GOD_VIDEO },
     {

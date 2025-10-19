@@ -16,6 +16,7 @@ export const HeroItem = ({
   id,
   ref,
   title = "Item",
+  description,
   onClick,
   accordionValue,
   onAccordionChange,
@@ -27,6 +28,7 @@ export const HeroItem = ({
   id?: string;
   ref?: React.Ref<HTMLDivElement>;
   title?: string;
+  description?: string;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   accordionValue?: string;
   onAccordionChange?: (val: string | undefined) => void;
@@ -56,14 +58,14 @@ export const HeroItem = ({
           `from-filter-disabled-start to-filter-disabled-end `
         )}
       ></div>
-      {main && (
+      {/* {main && (
         <div className="grid-item-1-overlay invisible opacity-0 absolute inset-0 flex justify-center items-center  z-50">
           <Logo
             size="md"
             className="invisible opacity-0 -translate-x-[2%] text-logo z-40"
           />
         </div>
-      )}
+      )} */}
       {/* <div className="flex justify-between w-full">
                 <BatteryIcon className="w-7 h-7 text-white" />
                 <div className="recording   flex items-center gap-1">
@@ -73,16 +75,23 @@ export const HeroItem = ({
               </div> */}
       {!main && (
         <div className="overlay pointer-coarse:hidden absolute inset-0 overflow-hidden rounded-[4px]">
-          <div className="viewfinder absolute inset-[var(--sliding-card-padding)] ">
+          <div className="viewfinder absolute inset-0 ">
             {/* <div className="tl absolute rounded-tl-[8px] top-0 left-0 w-[25%] h-[25%] border-l-2 border-t-2 border-white"></div>
             <div className="tr absolute rounded-tr-[8px] top-0 right-0 w-[25%] h-[25%] border-r-2 border-t-2 border-white"></div> */}
             <div className="viewfinder-content pt-3 pb-2 pl-1 xxs:pl-2 pr-2 xxs:pr-6 flex flex-col items-start justify-between w-full h-full">
               <div
-                onClick={(e) => e.stopPropagation()}
-                className="pb-1 flex justify-start items-end h-full w-full text-primary text-xl xl:text-2xl font-[320]"
+                // onClick={(e) => e.stopPropagation()}
+                className="pb-2 px-3 flex flex-col justify-end items-start gap-y-1 h-full w-5/6"
               >
-                {/* <div className="hero-item-title">{title}</div> */}
-                <Accordion
+                <div className="item-title text-font-reversed text-2xl font-[330]">
+                  {title}
+                </div>
+                <div className="item-description-wrapper relative text-font-reversed text-base font-[330] h-0 overflow-hidden">
+                  <div className="item-description invisible">
+                    {description}
+                  </div>
+                </div>
+                {/* <Accordion
                   type="single"
                   value={accordionValue}
                   onValueChange={onAccordionChange}
@@ -98,7 +107,7 @@ export const HeroItem = ({
                       fugit fuga suscipit magni!
                     </AccordionContent>
                   </AccordionItem>
-                </Accordion>
+                </Accordion> */}
               </div>
             </div>
 

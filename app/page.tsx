@@ -29,7 +29,6 @@ export default function Home() {
 
       <Section>
         <SectionGrid>
-          {/* Individual Cards are Pinned */}
           <SlidingCards className="col-start-1 col-span-full" />
         </SectionGrid>
       </Section>
