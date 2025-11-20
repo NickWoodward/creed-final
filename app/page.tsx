@@ -1,4 +1,4 @@
-import { Hero } from "@/components/Hero";
+import { Hero2 } from "@/components/Hero2";
 import { Pinned } from "@/components/Pinned";
 import { Section } from "@/components/Section";
 import { SectionGrid } from "@/components/SectionGrid";
@@ -12,7 +12,7 @@ export default function Home() {
       <Section>
         <Pinned className="h-screen col-start-1 col-span-full p-[var(--card-inset)]">
           <VideoControlProvider>
-            <Hero />
+            <Hero2 />
           </VideoControlProvider>
         </Pinned>
       </Section>

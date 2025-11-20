@@ -48,7 +48,7 @@ type CreateAnimation = (
   self: SplitText
 ) => gsap.core.Tween | gsap.core.Timeline;
 
-type SplitTextWithAnimate = SplitText & {
+export type SplitTextWithAnimate = SplitText & {
   animate?: (
     create: CreateAnimation
   ) => gsap.core.Tween | gsap.core.Timeline | undefined;

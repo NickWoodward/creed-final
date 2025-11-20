@@ -6,41 +6,57 @@ export const heroData = {
   description:
     "Professional videography and photography services for artists, corporate clients, and events.",
 
+
   services: [
     {
       title: "Professional Profiles",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+      video: {
+        id: "hero-video-2",
+        url: process.env.NEXT_PUBLIC_PROFESSIONAL_VIDEO,
+        placeholder: professionalPlaceholder,
+      },
     },
     {
       title: "Corporate Communications",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+      video: {
+        id: "hero-video-3",
+        url: process.env.NEXT_PUBLIC_WEDDING_VIDEO,
+        placeholder: weddingPlaceholder,
+      },
     },
     {
       title: "Special Events",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus molestias odit repellat omnis similique corrupti, distinctio impedit veritatis doloribus quaerat!",
+      video: {
+        id: "hero-video-4",
+        url: process.env.NEXT_PUBLIC_JAKE_VIDEO,
+        placeholder: jakePlaceholder,
+      },
     },
   ],
 
-  videos: [
-    { id: "hero-video-1", url: process.env.NEXT_PUBLIC_GOD_VIDEO },
-    {
-      id: "hero-video-2",
-      url: process.env.NEXT_PUBLIC_PROFESSIONAL_VIDEO,
-      placeholder: professionalPlaceholder,
-    },
-    {
-      id: "hero-video-3",
-      url: process.env.NEXT_PUBLIC_WEDDING_VIDEO,
-      placeholder: weddingPlaceholder,
-    },
-    {
-      id: "hero-video-4",
-      url: process.env.NEXT_PUBLIC_JAKE_VIDEO,
-      placeholder: jakePlaceholder,
-      startTime: 5,
-    },
-  ],
+  // videos: [
+  //   { id: "hero-video-1", url: process.env.NEXT_PUBLIC_GOD_VIDEO },
+  //   {
+  //     id: "hero-video-2",
+  //     url: process.env.NEXT_PUBLIC_PROFESSIONAL_VIDEO,
+  //     placeholder: professionalPlaceholder,
+  //   },
+  //   {
+  //     id: "hero-video-3",
+  //     url: process.env.NEXT_PUBLIC_WEDDING_VIDEO,
+  //     placeholder: weddingPlaceholder,
+  //   },
+  //   {
+  //     id: "hero-video-4",
+  //     url: process.env.NEXT_PUBLIC_JAKE_VIDEO,
+  //     placeholder: jakePlaceholder,
+  //     startTime: 5,
+  //   },
+  // ],
 };

@@ -75,7 +75,7 @@ export const HlsVideo = ({
   return (
     <div
       className={cn(
-        "relative flex items-center h-full w-full rounded-none overflow-hidden",
+        "absolute inset-0 flex items-center h-full w-full rounded-none overflow-hidden",
         className
       )}
     >
