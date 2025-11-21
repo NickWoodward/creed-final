@@ -74,7 +74,7 @@ export const SlidingCards = ({ className }: { className: string }) => {
                   start: "bottom top",
                   end: "bottom+=200% top",
                   // scrub: 2,
-                  markers: true,
+                  // markers: true,
                   toggleActions: "play reverse play reverse",
                 },
               });
@@ -102,7 +102,7 @@ export const SlidingCards = ({ className }: { className: string }) => {
                   start: "top top",
                   end: "bottom+=100% top",
                   // scrub: 2,
-                  markers: true,
+                  // markers: true,
                   toggleActions: "play reverse play reverse",
                 },
               });

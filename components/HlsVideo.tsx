@@ -75,7 +75,7 @@ export const HlsVideo = ({
   return (
     <div
       className={cn(
-        "absolute inset-0 flex items-center h-full w-full rounded-none overflow-hidden",
+        "absolute inset-0 flex items-center  overflow-hidden",
         className
       )}
     >
@@ -92,7 +92,7 @@ export const HlsVideo = ({
         }
         muted
         autoPlay={autoPlay}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover "
       />
     </div>
   );

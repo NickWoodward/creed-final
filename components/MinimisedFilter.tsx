@@ -10,7 +10,7 @@ export const MinimisedFilter = ({
   return (
     <div
       ref={ref}
-      className={cn("minimised-filter absolute inset-0 bg-slate-800/50", className)}
+      className={cn("minimised-filter absolute bg-slate-800/40", className)}
     ></div>
   );
 };

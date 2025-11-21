@@ -20,7 +20,6 @@ export default function Home() {
       <Section>
         <Pinned
           end="+=100%"
-          markers
           className=" h-screen col-start-1 col-span-full px-[var(--card-inset)]"
         >
           <About />
@@ -36,7 +35,6 @@ export default function Home() {
       <Section>
         <Pinned
           end="+=100%"
-          markers
           className=" h-screen col-start-1 col-span-full px-[var(--card-inset)]"
         >
           <About />

@@ -6,6 +6,7 @@ export const heroData = {
   description:
     "Professional videography and photography services for artists, corporate clients, and events.",
 
+  defaultVideo: { id: "hero-video-1", url: process.env.NEXT_PUBLIC_GOD_VIDEO },
 
   services: [
     {
@@ -36,6 +37,7 @@ export const heroData = {
         id: "hero-video-4",
         url: process.env.NEXT_PUBLIC_JAKE_VIDEO,
         placeholder: jakePlaceholder,
+        startTime: 5,
       },
     },
   ],
