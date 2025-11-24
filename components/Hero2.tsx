@@ -25,7 +25,7 @@ const heroItems = [
     className: "bg-violet-300",
     wrapper: {
       className:
-        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-1 md:row-start-1 row-span-1 md:row-span-3",
+        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-1 md:row-start-1 row-span-2 md:row-span-3",
     },
     position: "br",
   },
@@ -34,7 +34,7 @@ const heroItems = [
     className: "bg-sky-300",
     wrapper: {
       className:
-        "col-start-1 col-span-full md:col-start-1 md:col-span-2 row-start-2 md:row-start-3 row-span-1 md:row-span-full",
+        "col-start-1 col-span-full md:col-start-1 md:col-span-2 row-start-4 md:row-start-3 row-span-1 md:row-span-full",
     },
     position: "bl",
   },
@@ -43,7 +43,7 @@ const heroItems = [
     className: "bg-orange-300",
     wrapper: {
       className:
-        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-3 md:row-start-4 row-span-1 md:row-span-full",
+        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-6 md:row-start-4 row-span-1 md:row-span-full",
     },
     position: "br",
   },
@@ -413,7 +413,7 @@ export const Hero2 = ({ className }: { className?: string }) => {
       ref={containerRef}
       className={cn(
         `hero relative h-full
-            grid !grid-cols-1 md:!grid-cols-6 !grid-rows-4 md:!grid-rows-6 gap-y-[var(--card-inset)] md:gap-6
+            grid !grid-cols-1 md:!grid-cols-6 grid-rows-[1fr_1fr_var(--card-inset)_1fr_var(--card-inset)_1fr]! md:!grid-rows-6  md:gap-6
           `,
         className
       )}

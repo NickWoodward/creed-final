@@ -13,7 +13,7 @@ export default function Home() {
       <LoadingScreen className="fixed inset-0 z-[1000] overflow-hidden" />
 
       <Section>
-        <Pinned className="lg:bg-blue-500 h-[200svh] md:h-screen col-start-1 col-span-full p-[var(--card-inset)]">
+        <Pinned className="lg:bg-blue-500 h-[200svh] md:h-screen col-start-1 col-span-full p-[var(--card-inset)]  md:p-[var(--card-inset)]">
           <VideoControlProvider>
             <Hero2 />
           </VideoControlProvider>
