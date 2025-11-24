@@ -14,6 +14,7 @@ import { MinimisedFilter } from "./MinimisedFilter";
 import { SectionGrid } from "./SectionGrid";
 import { useVideoControls } from "@/contexts/VideoControlProvider";
 import { DefaultHeroItem } from "./DefaultHeroItem";
+import { Logo } from "./Logo";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, Flip);
 
@@ -22,20 +23,27 @@ const heroItems = [
   {
     id: 0,
     className: "bg-violet-300",
-    wrapper: { className: "col-start-3 col-span-full row-start-1 row-span-3" },
+    wrapper: {
+      className:
+        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-1 md:row-start-1 row-span-1 md:row-span-3",
+    },
     position: "br",
   },
   {
     id: 1,
     className: "bg-sky-300",
-    wrapper: { className: "col-start-1 col-span-2 row-start-3 row-span-full" },
+    wrapper: {
+      className:
+        "col-start-1 col-span-full md:col-start-1 md:col-span-2 row-start-2 md:row-start-3 row-span-1 md:row-span-full",
+    },
     position: "bl",
   },
   {
     id: 2,
     className: "bg-orange-300",
     wrapper: {
-      className: "col-start-3 col-span-full row-start-4 row-span-full",
+      className:
+        "col-start-1 col-span-full md:col-start-3 md:col-span-full row-start-3 md:row-start-4 row-span-1 md:row-span-full",
     },
     position: "br",
   },
@@ -47,8 +55,7 @@ export const Hero2 = ({ className }: { className?: string }) => {
   const defaultItemRef = useRef<HTMLDivElement>(null);
   const initialGridItemRef = useRef<HTMLDivElement>(null);
 
-  const { setCurrentVideo, getCurrentVideo, playVideo, pauseVideo, videosRef } =
-    useVideoControls();
+  const { setCurrentVideo } = useVideoControls();
 
   const itemRefs = useRef<HTMLDivElement[]>([]);
   const setItemRefs = (index: number) => {
@@ -78,6 +85,13 @@ export const Hero2 = ({ className }: { className?: string }) => {
     };
   };
 
+  const controlsRefs = useRef<HTMLDivElement[]>([]);
+  const setControlsRefs = (index: number) => {
+    return (element: HTMLDivElement) => {
+      controlsRefs.current[index] = element;
+    };
+  };
+
   const minimisedFilterRefs = useRef<HTMLDivElement[]>([]);
   const setMinimisedFilterRefs = (index: number) => {
     return (element: HTMLDivElement) => {
@@ -91,94 +105,170 @@ export const Hero2 = ({ className }: { className?: string }) => {
   const currentItemAnimation = useRef<gsap.core.Timeline | null>(null);
   // const currentScrollAnimation = useRef<gsap.core.Timeline | null>(null);
 
-  const { contextSafe } = useGSAP(() => {
-    //// CREATE SPLITTEXT ANIMATORS ////
-    mainTextAnimatorRefs.current = titleRefs.current.map((item) => {
-      const split = SplitTextAnimator(item, {
+  const { contextSafe } = useGSAP(
+    () => {
+      //// CREATE SPLITTEXT ANIMATORS ////
+      mainTextAnimatorRefs.current = titleRefs.current.map((item) => {
+        const split = SplitTextAnimator(item, {
+          type: "chars,lines",
+          mask: "chars",
+          charsClass: "char",
+          autoSplit: true,
+        });
+
+        gsap.set(split.chars, { xPercent: -100, autoAlpha: 0 });
+
+        return split;
+      });
+
+      previewTextAnimatorRefs.current = titlePreviewRefs.current.map((item) => {
+        return SplitTextAnimator(item, {
+          type: "chars,lines",
+          mask: "chars",
+          charsClass: "char",
+          autoSplit: true,
+        });
+      });
+      //// END CREATE SPLITTEXT ANIMATORS ////
+
+      //// DEFAULT HERO ITEM SCROLLTRIGGER ////
+      const logoSVG = containerRef.current?.querySelector(".logo-svg");
+      const heroTextSplit = SplitTextAnimator(".logo-text", {
         type: "chars,lines",
         mask: "chars",
         charsClass: "char",
         autoSplit: true,
       });
+      const heroDescription = document.querySelector(".hero-description");
 
-      gsap.set(split.chars, { xPercent: -100, autoAlpha: 0 });
+      let currentScrollAnimation: gsap.core.Timeline | undefined;
+      const initialItem =
+        displayRef.current?.querySelector(".default-hero-item");
 
-      return split;
-    });
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        scroller: window,
+        start: "top top",
+        end: "+=25%",
+        markers: true,
+        onEnter: () => {
+          console.log("flip!", initialItem);
+          if (!initialItem || !initialGridItemRef.current) return;
+          currentScrollAnimation && currentScrollAnimation.kill();
 
-    previewTextAnimatorRefs.current = titlePreviewRefs.current.map((item) => {
-      return SplitTextAnimator(item, {
-        type: "chars,lines",
-        mask: "chars",
-        charsClass: "char",
-        autoSplit: true,
+          currentScrollAnimation = gsap.timeline();
+          const itemState = Flip.getState(initialItem);
+          initialGridItemRef.current.appendChild(initialItem);
+
+          if (heroTextSplit.animate) {
+            const heroTextAnimation = heroTextSplit.animate((self) => {
+              return gsap.to(self.chars, {
+                xPercent: -100,
+                autoAlpha: 0,
+                stagger: { each: 0.02, from: "start" },
+                ease: "power4.in",
+              });
+            });
+
+            heroTextAnimation &&
+              currentScrollAnimation?.add(heroTextAnimation, "<");
+          }
+
+          logoSVG &&
+            currentScrollAnimation.to(
+              logoSVG,
+              {
+                autoAlpha: 0,
+                duration: 0.2,
+              },
+              "<+=0.2"
+            );
+
+          heroDescription &&
+            currentScrollAnimation?.to(
+              heroDescription,
+              {
+                autoAlpha: 0,
+              },
+              "<+=0.1"
+            );
+
+          currentScrollAnimation?.add(
+            Flip.from(itemState, {
+              duration: 0.7,
+              ease: "power4.inOut",
+              absolute: true,
+              simple: true,
+              onComplete: () => {
+                displayRef.current?.classList.add("pointer-events-none");
+                gsap.set(initialItem, { zIndex: 10 });
+              },
+              onStart: () => {
+                gsap.set(initialItem, { zIndex: 101 });
+              },
+            }),
+            "<+=0.1"
+          );
+        },
+        onLeaveBack: () => {
+          if (!initialItem) return;
+          currentScrollAnimation && currentScrollAnimation.kill();
+          const itemState = Flip.getState(initialItem);
+          displayRef.current?.appendChild(initialItem);
+
+          currentScrollAnimation = gsap.timeline();
+          currentScrollAnimation?.add(
+            Flip.from(itemState, {
+              duration: 0.7,
+              ease: "power4.inOut",
+              absolute: true,
+              simple: true,
+              onComplete: () => {
+                displayRef.current?.classList.toggle("pointer-events-none");
+                setCurrentVideo(heroData.defaultVideo.id);
+              },
+              // onStart: () => {
+              //   gsap.set(initialItem, { zIndex: 101 });
+              // },
+            }),
+            "<"
+          );
+
+          logoSVG &&
+            currentScrollAnimation.to(
+              logoSVG,
+              {
+                autoAlpha: 1,
+              },
+              ">-=0.02"
+            );
+
+          if (heroTextSplit.animate) {
+            const heroTextAnimation = heroTextSplit.animate((self) => {
+              return gsap.to(self.chars, {
+                xPercent: 0,
+                autoAlpha: 100,
+                stagger: { each: 0.03, from: "start" },
+                ease: "power4.out",
+              });
+            });
+            heroTextAnimation &&
+              currentScrollAnimation?.add(heroTextAnimation, "<+=0.02");
+          }
+          heroDescription &&
+            currentScrollAnimation?.to(
+              heroDescription,
+              {
+                autoAlpha: 1,
+              },
+              "<"
+            );
+        },
       });
-    });
-    //// END CREATE SPLITTEXT ANIMATORS ////
-
-    //// DEFAULT HERO ITEM SCROLLTRIGGER ////
-
-    let currentScrollAnimation: gsap.core.Timeline | undefined;
-    const initialItem = displayRef.current?.querySelector(".default-hero-item");
-
-    ScrollTrigger.create({
-      trigger: containerRef.current,
-      scroller: window,
-      start: "top top",
-      end: "+=25%",
-      markers: true,
-      onEnter: () => {
-        console.log("flip!", initialItem);
-        if (!initialItem || !initialGridItemRef.current) return;
-        currentScrollAnimation && currentScrollAnimation.kill();
-
-        currentScrollAnimation = gsap.timeline();
-        const itemState = Flip.getState(initialItem);
-        initialGridItemRef.current.appendChild(initialItem);
-        currentScrollAnimation?.add(
-          Flip.from(itemState, {
-            duration: 0.8,
-            ease: "power4.inOut",
-            absolute: true,
-            simple: true,
-            onComplete: () => {
-              displayRef.current?.classList.add("pointer-events-none");
-              gsap.set(initialItem, { zIndex: 10 });
-            },
-            onStart: () => {
-              gsap.set(initialItem, { zIndex: 101 });
-            },
-          }),
-          "<"
-        );
-      },
-      onLeaveBack: () => {
-        if (!initialItem) return;
-        currentScrollAnimation && currentScrollAnimation.kill();
-        const itemState = Flip.getState(initialItem);
-        displayRef.current?.appendChild(initialItem);
-
-        currentScrollAnimation = gsap.timeline();
-        currentScrollAnimation?.add(
-          Flip.from(itemState, {
-            duration: 0.8,
-            ease: "power4.inOut",
-            absolute: true,
-            simple: true,
-            onComplete: () => {
-              displayRef.current?.classList.toggle("pointer-events-none");
-              setCurrentVideo(heroData.defaultVideo.id);
-            },
-            // onStart: () => {
-            //   gsap.set(initialItem, { zIndex: 101 });
-            // },
-          }),
-          "<"
-        );
-      },
-    });
-    //// END DEFAULT HERO ITEM SCROLLTRIGGER ////
-  });
+      //// END DEFAULT HERO ITEM SCROLLTRIGGER ////
+    },
+    { scope: containerRef }
+  );
 
   const createAnimation = (
     action: "open" | "close",
@@ -244,11 +334,17 @@ export const Hero2 = ({ className }: { className?: string }) => {
 
     if (action === "close") {
       currentItemAnimation.current.add(mainTextAnimation).to(
-        descriptionRefs.current,
+        [descriptionRefs.current[itemIndex], controlsRefs.current[itemIndex]],
         {
           autoAlpha: 0,
           onComplete: () => {
-            gsap.set(descriptionRefs.current, { display: "none" });
+            gsap.set(
+              [
+                descriptionRefs.current[itemIndex],
+                controlsRefs.current[itemIndex],
+              ],
+              { display: "none" }
+            );
           },
         },
         "<"
@@ -259,7 +355,7 @@ export const Hero2 = ({ className }: { className?: string }) => {
 
     currentItemAnimation.current.add(
       Flip.from(itemState, {
-        duration: 0.8,
+        duration: 0.7,
         absolute: true,
         simple: true,
         ease: "power4.inOut",
@@ -283,15 +379,22 @@ export const Hero2 = ({ className }: { className?: string }) => {
 
     if (action === "open") {
       currentItemAnimation.current.add(
-        gsap.set(descriptionRefs.current[itemIndex], {
-          display: "block",
-          zIndex: 100,
-        }),
+        gsap.set(
+          [descriptionRefs.current[itemIndex], controlsRefs.current[itemIndex]],
+          {
+            display: "flex",
+            zIndex: 100,
+          }
+        ),
         ">-=0.2"
       );
       currentItemAnimation.current
         .add(mainTextAnimation, "<")
-        .to(descriptionRefs.current[itemIndex], { autoAlpha: 1 }, "<");
+        .to(
+          [descriptionRefs.current[itemIndex], controlsRefs.current[itemIndex]],
+          { autoAlpha: 1 },
+          "<"
+        );
     } else {
       currentItemAnimation.current.add(previewTextAnimation);
     }
@@ -309,15 +412,15 @@ export const Hero2 = ({ className }: { className?: string }) => {
     <SectionGrid
       ref={containerRef}
       className={cn(
-        `hero  relative h-full
-            grid !grid-cols-6 !grid-rows-6 gap-6
+        `hero relative h-full
+            grid !grid-cols-1 md:!grid-cols-6 !grid-rows-4 md:!grid-rows-6 gap-y-[var(--card-inset)] md:gap-6
           `,
         className
       )}
     >
       <div
         ref={displayRef}
-        className={`display z-[101] absolute inset-0 overflow-hidden `}
+        className={`display relative z-[101] col-start-1 col-span-full row-start-1 row-span-2 md:row-span-full  overflow-hidden `}
       >
         <DefaultHeroItem ref={defaultItemRef}>
           <HlsVideo
@@ -329,6 +432,14 @@ export const Hero2 = ({ className }: { className?: string }) => {
           />
           <MinimisedFilter className="rounded-[4px] inset-[7px]" />
         </DefaultHeroItem>
+      </div>
+
+      <div className="main-hero-content  pointer-events-none absolute inset-0 flex items-center  pl-[5%] xxs:pl-[7%] md:pl-[10%] z-[101]">
+        <Logo size="hero" className="logo-main text-logo" />
+        <div className="hero-description mt-3 lg:mt-5 ml-3 sm:ml-4 text-secondary-lighter text-xl xxs:text-2xl lg:text-3xl  font-[320] max-w-[88%] xs:max-w-[86%] sm:max-w-[500px] lg:max-w-[650px]">
+          Professional videography and photography services for artists,
+          corporate clients, and events.
+        </div>
       </div>
 
       <div
@@ -355,6 +466,7 @@ export const Hero2 = ({ className }: { className?: string }) => {
               titlePreviewRef={setTitlePreviewRefs(item.id)}
               titleRef={setTitleRefs(item.id)}
               descriptionRef={setDescriptionRefs(item.id)}
+              controlsRef={setControlsRefs(item.id)}
               onClick={handleClick}
               title={heroData.services[item.id].title}
               description={heroData.services[item.id].description}

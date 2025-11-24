@@ -1,3 +1,5 @@
+import { useVideoControls } from "@/contexts/VideoControlProvider";
+import { PauseIcon, VolumeMutedIcon } from "@/lib/svg";
 import { cn } from "@/lib/utils";
 
 export type Position = "tl" | "tr" | "br" | "bl";
@@ -29,6 +31,7 @@ export const HeroItem2 = ({
   title,
   descriptionRef,
   description = "this is a test",
+  controlsRef,
   onClick,
   className,
   children,
@@ -40,11 +43,14 @@ export const HeroItem2 = ({
   title: string;
   descriptionRef: React.Ref<HTMLDivElement>;
   description: string;
+  controlsRef: React.Ref<HTMLDivElement>;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   className?: string;
   children?: React.ReactNode;
   position?: Position;
 }) => {
+  const { getCurrentVideo, toggleVideo, toggleAudio } = useVideoControls();
+
   return (
     <div
       data-item-index={dataItemIndex}
@@ -68,7 +74,7 @@ export const HeroItem2 = ({
       <div
         ref={titleRef}
         className={cn(
-          "main-text col-start-1 col-span-1 row-start-3 row-span-1 text-start pb-2 px-12"
+          "main-text col-start-1 col-span-1 row-start-3 row-span-1 text-start pb-2 px-8"
           // titleClasses[position]
         )}
       >
@@ -76,9 +82,31 @@ export const HeroItem2 = ({
       </div>
       <div
         ref={descriptionRef}
-        className="description-text col-start-1 col-span-2 row-start-4 row-span-1 hidden opacity-0 invisible pb-8 px-12 text-lg"
+        className="description-text col-start-1 col-span-2 row-start-4 row-span-1 max-w-2xl hidden opacity-0 invisible pb-8 px-8 text-lg"
       >
         {description}
+      </div>
+
+      <div
+        ref={controlsRef}
+        className="controls gap-x-3.5 justify-end items-center col-start-3 col-span-1 row-start-4 row-span-1 hidden opacity-0 invisible pb-8 px-8"
+      >
+        <PauseIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            const video = getCurrentVideo();
+            video && toggleVideo(video);
+          }}
+          className="size-7"
+        />
+        <VolumeMutedIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            const video = getCurrentVideo();
+            video && toggleAudio(video);
+          }}
+          className="size-8"
+        />
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Header";
+import { ThemeProvider } from "next-themes";
+import { SectionGrid } from "@/components/SectionGrid";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`relative ${geistSans.variable} ${geistMono.variable} bg-background antialiased transition-colors duration-300`}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SectionGrid className="fixed top-header-inset inset-x-0 px-[var(--header-padding)]  z-[200]">
+            <Header />
+          </SectionGrid>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

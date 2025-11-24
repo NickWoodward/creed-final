@@ -19,6 +19,7 @@ export const HlsVideo = ({
   className,
   filter,
   autoPlay = false,
+  muted = true,
 }: {
   id: string;
   url?: string;
@@ -28,6 +29,7 @@ export const HlsVideo = ({
   className?: string;
   filter?: React.ReactNode;
   autoPlay?: boolean;
+  muted?: boolean;
 }) => {
   const { registerVideo, unregisterVideo, setCurrentVideo } =
     useVideoControls();
@@ -90,7 +92,7 @@ export const HlsVideo = ({
               : placeholder.src
             : undefined
         }
-        muted
+        muted={muted}
         autoPlay={autoPlay}
         className="h-full w-full object-cover "
       />

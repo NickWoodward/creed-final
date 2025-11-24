@@ -20,6 +20,8 @@ interface VideoControlContextType {
   >;
   playVideo: (videoId: string) => void;
   pauseVideo: (videoId: string) => void;
+  toggleVideo: (videoId: string) => void;
+  toggleAudio: (videoId: string) => void;
   getVideoDuration: (videoId: string) => number;
 }
 
@@ -85,6 +87,29 @@ export const VideoControlProvider = ({
     }
   };
 
+  const toggleVideo = (videoId: string) => {
+    const videoData = videosRef.current.get(videoId);
+    if (!videoData) return;
+
+    const { video } = videoData;
+    const isPlaying = !video.paused && !video.ended && video.readyState >= 2;
+
+    if (isPlaying) {
+      pauseVideo(videoId);
+    } else {
+      playVideo(videoId);
+    }
+  };
+
+  const toggleAudio = (videoId: string) => {
+    const videoData = videosRef.current.get(videoId);
+    if (!videoData) return;
+
+    const { video } = videoData;
+
+    video.muted = !video.muted;
+  };
+
   const getVideoDuration = (videoId: string) => {
     const videoData = videosRef.current.get(videoId);
     if (videoData) return videoData.video.duration;
@@ -102,6 +127,8 @@ export const VideoControlProvider = ({
         playVideo,
         pauseVideo,
         getVideoDuration,
+        toggleVideo,
+        toggleAudio,
         ...(DEBUG && { debugVideos }),
       }}
     >

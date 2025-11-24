@@ -4,23 +4,60 @@
 
 :root {
   --card-inset: 2rem;
+  --header-padding: 1rem;
 
 
   /* colors */
   --font: 205, 16%, 25%;
   --font-reversed: 45, 55%, 94%;
+  --font-header: 45, 55%, 88%;
 
-  --border: 205,16%,70%;
+  --background: 45, 100%, 95%;
+  --background-reversed: 205, 16%, 25%;
+  --background-intro: 205, 16%, 17%;
+  --border: 205, 16%, 25%;
   /* --border: 205,16%,25%; */
 
+  --icon: 205, 16%, 25%;
+
+}
+
+.dark {
+  --background: 205, 16%, 17%;
+  --border: 45, 55%, 86%;
+  --border-reverse: 205,16%,25%;
+  --filter: 240, 16%, 12%;
+  --icon: 45, 55%, 88%;
+  --icon-secondary: 205, 8%, 40%;
+  --icon-tertiary: 205, 8%, 35%;
+  --font: 45, 55%, 90%;
+  --font-reverse: 205, 16%, 25%;
+  --font-light: 45, 55%, 90%;
+  --logo:  45, 55%, 86%;
+  --font-faded: 205, 16%, 25%;
+  --font-header: 205, 16%, 25%;
 
 }
 
 @theme {
   --color-background: hsla(var(--background));
+  --color-background-reversed: hsla(var(--background-reversed));
+  --color-background-intro: hsla(var(--background-intro));
   --color-border: hsla(var(--border));
   --color-font: hsla(var(--font));
   --color-font-reversed: hsla(var(--font-reversed));
+  --color-font-header: hsla(var(--font-header));
+  --color-icon: hsla(var(--icon));
+
+  --spacing-header-inset: calc(var(--card-inset) + var(--header-padding));
+
+  --breakpoint-xxs: 380px;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1500px;
 }
 
 .line {

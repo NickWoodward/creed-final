@@ -5,12 +5,15 @@ import { SectionGrid } from "@/components/SectionGrid";
 import { About } from "@/components/About";
 import { SlidingCards } from "@/components/SlidingCards";
 import { VideoControlProvider } from "@/contexts/VideoControlProvider";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className="relative">
+      <LoadingScreen className="fixed inset-0 z-[1000] overflow-hidden" />
+
       <Section>
-        <Pinned className="h-screen col-start-1 col-span-full p-[var(--card-inset)]">
+        <Pinned className="lg:bg-blue-500 h-[200svh] md:h-screen col-start-1 col-span-full p-[var(--card-inset)]">
           <VideoControlProvider>
             <Hero2 />
           </VideoControlProvider>
